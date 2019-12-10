@@ -103,23 +103,25 @@ class CachedReaderTest extends AbstractReaderTest
             ->expects($this->at(0))
             ->method('fetch')
             ->with($this->equalTo($cacheKey))
-            ->will($this->returnValue([])) // Result was cached, but there was no annotation
+            ->willReturn([]) // Result was cached, but there was no annotation
         ;
         $cache
             ->expects($this->at(1))
             ->method('fetch')
             ->with($this->equalTo('[C]'.$cacheKey))
-            ->will($this->returnValue($lastCacheModification))
+            ->willReturn($lastCacheModification)
         ;
         $cache
             ->expects($this->at(2))
             ->method('save')
             ->with($this->equalTo($cacheKey))
+            ->willReturn(true)
         ;
         $cache
             ->expects($this->at(3))
             ->method('save')
             ->with($this->equalTo('[C]'.$cacheKey))
+            ->willReturn(true)
         ;
 
         $reader = new CachedReader(new AnnotationReader(), $cache, true);
@@ -141,12 +143,12 @@ class CachedReaderTest extends AbstractReaderTest
             ->expects($this->at(0))
             ->method('fetch')
             ->with($this->equalTo($cacheKey))
-            ->will($this->returnValue([$route])); // Result was cached, but there was an annotation;
+            ->willReturn([$route]); // Result was cached, but there was an annotation;
         $cache
             ->expects($this->at(1))
             ->method('fetch')
             ->with($this->equalTo('[C]' . $cacheKey))
-            ->will($this->returnValue($lastCacheModification));
+            ->willReturn($lastCacheModification);
         $cache->expects(self::never())->method('save');
 
         $reader = new CachedReader(new AnnotationReader(), $cache, true);

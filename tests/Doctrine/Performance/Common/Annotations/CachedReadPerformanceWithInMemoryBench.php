@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Doctrine\Performance\Common\Annotations;
 
+use Cache\Adapter\PHPArray\ArrayCachePool;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Tests\Common\Annotations\Fixtures\Controller;
 use ReflectionMethod;
 
@@ -23,7 +23,7 @@ final class CachedReadPerformanceWithInMemoryBench
 
     public function initialize() : void
     {
-        $this->reader = new CachedReader(new AnnotationReader(), new ArrayCache());
+        $this->reader = new CachedReader(new AnnotationReader(), new ArrayCachePool());
         $this->method = new ReflectionMethod(Controller::class, 'helloAction');
     }
 
